@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>James Reymar Bacusa — Short-form editing & motion design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#262523;
+    --cream:#F1EEE8;
+    --cream-lift:#F8F6F2;
+    --blue:#3D2EE8;
+    --blue-deep:#2A1FB8;
+    --lime:#D8F44C;
+    --black:#1A1917;
+    --line:rgba(38,37,35,.18);
+    --radius:22px;
+  }
+
+  *{box-sizing:border-box}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    margin:0;
+    padding:16px;
+    background:var(--ink);
+    font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .frame{
+    max-width:1180px;
+    margin:0 auto;
+    background:var(--cream);
+    border-radius:30px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .frame::before,
+  .frame::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    background:var(--cream-lift);
+    pointer-events:none;
+  }
+  .frame::before{width:760px;height:620px;top:-260px;right:-200px}
+  .frame::after{width:900px;height:760px;top:640px;left:-320px}
+
+  .inner{position:relative;z-index:1;padding:38px clamp(20px,5vw,64px) 40px}
+
+  /* ---------- nav ---------- */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding-bottom:22px;border-bottom:1px solid var(--line);
+  }
+  .nav-group{display:flex;align-items:center;gap:clamp(18px,3vw,34px)}
+  .nav a,
+  .nav button{
+    font-family:"DM Mono",monospace;
+    font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;opacity:.75;
+    transition:opacity .2s ease,background .2s ease,color .2s ease;
+    background:none;border:none;padding:0;cursor:pointer;
+  }
+  .nav a:hover,
+  .nav button:hover{opacity:1}
+  .nav button:focus-visible,
+  .cta:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:4px}
+  .brand{
+    font-family:"Archivo",sans-serif;font-weight:800;font-size:14px;
+    letter-spacing:-.01em;text-transform:uppercase;opacity:1;
+  }
+  .nav .pill-link{
+    border:1.5px solid var(--ink);border-radius:999px;
+    padding:8px 16px;opacity:1;font-weight:500;
+  }
+  .nav .pill-link:hover{background:var(--ink);color:var(--cream)}
+  .nav-links{display:flex;gap:clamp(18px,3vw,34px)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(38px,6vw,62px) 0 0;position:relative}
+
+  h1{
+    font-family:"Archivo",sans-serif;
+    font-weight:800;
+    font-size:clamp(34px,6.6vw,74px);
+    line-height:.98;
+    letter-spacing:-.03em;
+    text-transform:uppercase;
+    text-align:center;
+    margin:0 auto;
+    max-width:15ch;
+  }
+
+  .arrow-pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--lime);border-radius:999px;
+    width:clamp(58px,7vw,88px);height:clamp(30px,3.6vw,44px);
+    vertical-align:middle;margin:0 .12em;
+    position:relative;top:-.06em;
+  }
+  .arrow-pill svg{width:60%;height:auto;display:block}
+
+  .star{position:absolute;color:var(--blue);pointer-events:none}
+  .star svg{display:block;width:100%;height:100%}
+  .star-1{width:clamp(30px,4vw,52px);height:clamp(30px,4vw,52px);left:2%;top:6%}
+  .star-2{width:clamp(20px,2.6vw,34px);height:clamp(20px,2.6vw,34px);right:5%;top:2%;color:var(--lime)}
+
+  .hero-meta{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+    margin-top:clamp(30px,5vw,52px);flex-wrap:wrap;
+  }
+  .stats{font-size:13px;line-height:1.55}
+  .stats .label{
+    font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.6;display:block;margin-bottom:4px;
+  }
+  .stats strong{
+    display:block;font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:clamp(14px,1.6vw,17px);letter-spacing:-.01em;
+  }
+
+  .cta{
+    display:inline-flex;align-items:center;gap:8px;
+    background:transparent;border:none;padding:0;text-decoration:none;color:inherit;
+    font:inherit;cursor:pointer;
+  }
+  .cta .cta-text{
+    border:1.5px solid var(--lime);background:var(--lime);
+    border-radius:999px;padding:11px 22px;
+    font-family:"Archivo",sans-serif;font-weight:700;font-size:15px;
+    transition:transform .22s ease;
+  }
+  .cta .cta-badge{
+    width:40px;height:40px;border-radius:50%;background:var(--lime);
+    display:grid;place-items:center;transition:transform .22s ease;
+  }
+  .cta:hover .cta-badge{transform:rotate(45deg)}
+  .cta:hover .cta-text{transform:translateX(-3px)}
+
+  /* ---------- reel strip (signature) ---------- */
+  .reel{margin-top:clamp(28px,4vw,44px)}
+  .tiles{
+    display:flex;align-items:flex-start;justify-content:center;
+    gap:clamp(10px,1.4vw,18px);
+  }
+  .tile{
+    position:relative;flex:0 0 auto;
+    width:clamp(94px,13vw,152px);
+    border-radius:18px;overflow:hidden;
+    background:var(--blue);
+    cursor:pointer;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1);
+    border:none;padding:0;color:inherit;display:block;
+  }
+  .tile:hover{transform:translateY(-8px)}
+  .tile:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+  .tile .ratio{padding-top:150%}
+  .tile.tall .ratio{padding-top:178%}
+  .tile.t-dark{background:var(--black)}
+  .tile.t-lime{background:var(--lime)}
+  .tile.offset-a{margin-top:44px}
+  .tile.offset-b{margin-top:18px}
+  .tile.offset-c{margin-top:0}
+
+  .tile-art{position:absolute;inset:0;overflow:hidden}
+  .tile-art .band{position:absolute;border-radius:6px;opacity:.9}
+
+  .tile-tag{
+    position:absolute;left:8px;bottom:8px;right:8px;
+    font-family:"DM Mono",monospace;font-size:9.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:#fff;opacity:.85;
+    display:flex;justify-content:space-between;gap:6px;
+  }
+  .tile.t-lime .tile-tag{color:var(--black);opacity:.75}
+
+  .play{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);
+    width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);
+    display:grid;place-items:center;opacity:0;transition:all .25s ease;
+  }
+  .tile:hover .play{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .play svg{width:11px;height:11px;margin-left:2px}
+
+  /* timeline rail */
+  .rail{
+    margin-top:18px;position:relative;height:26px;
+    display:flex;align-items:center;
+  }
+  .rail-line{position:absolute;left:0;right:0;height:1px;background:var(--line)}
+  .rail-keys{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:clamp(10px,1.4vw,18px)}
+  .rail-key{
+    width:clamp(94px,13vw,152px);display:flex;justify-content:center;
+  }
+  .rail-key i{
+    width:7px;height:7px;background:var(--blue);display:block;
+    transform:rotate(45deg);border-radius:1px;
+  }
+  .playhead{
+    position:absolute;top:-6px;width:2px;height:26px;background:var(--ink);
+    left:6%;
+  }
+  .playhead::after{
+    content:"";position:absolute;top:-5px;left:-4px;
+    width:10px;height:7px;background:var(--ink);border-radius:2px;
+  }
+  .rail.run .playhead{animation:scrub 9s cubic-bezier(.5,0,.5,1) infinite alternate}
+  @keyframes scrub{from{left:5%}to{left:94%}}
+
+  .rail-meta{
+    display:flex;justify-content:space-between;
+    font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;opacity:.5;margin-top:6px;
+  }
+
+  /* ---------- work grid (5 videos) ---------- */
+  .work{margin-top:clamp(46px,7vw,80px)}
+  .work-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vw,26px);
+  }
+  .work-head h2{
+    font-family:"Archivo",sans-serif;font-weight:800;text-transform:uppercase;
+    font-size:clamp(26px,4.4vw,44px);letter-spacing:-.025em;margin:0;
+  }
+  .work-head .note{
+    font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.55;
+  }
+
+  .work-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);
+    gap:clamp(10px,1.4vw,16px);
+  }
+
+  .slot{display:flex;flex-direction:column;gap:10px}
+  .slot.wide{grid-column:1 / -1}
+  .slot.wide .slot-frame{aspect-ratio:16/9}
+
+  .slot-frame{
+    position:relative;border-radius:16px;overflow:hidden;
+    background:var(--black);border:1.5px solid var(--ink);
+    aspect-ratio:9/16;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  }
+  .slot:hover .slot-frame{transform:translateY(-6px)}
+
+  .slot-frame video,
+  .slot-frame iframe,
+  .slot-frame img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;border:0;display:block;
+  }
+
+  .slot-index{
+    position:absolute;top:10px;left:10px;z-index:2;
+    font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.08em;
+    background:var(--lime);color:var(--black);
+    padding:3px 8px;border-radius:999px;
+  }
+
+  .slot-empty{
+    position:absolute;inset:0;background:var(--cream-lift);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;text-align:center;padding:16px;
+  }
+  .slot-empty .ring{
+    width:46px;height:46px;border-radius:50%;
+    border:1.5px dashed var(--blue);display:grid;place-items:center;
+  }
+  .slot-empty .ring svg{width:13px;height:13px;margin-left:2px}
+  .slot-empty p{
+    margin:0;font-family:"DM Mono",monospace;font-size:10px;
+    letter-spacing:.06em;text-transform:uppercase;line-height:1.6;opacity:.55;
+  }
+
+  .slot-link{
+    display:block;text-decoration:none;color:inherit;
+    background:none;border:0;padding:0;width:100%;cursor:pointer;font:inherit;
+  }
+  .slot-link:focus-visible{outline:3px solid var(--blue);outline-offset:4px;border-radius:18px}
+
+  /* ---------- in-page player ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:80;padding:20px;
+    background:rgba(26,25,23,.9);
+    display:none;place-items:center;
+  }
+  .lightbox.open{display:grid}
+  .lb-card{width:min(370px,92vw);display:flex;flex-direction:column;gap:12px}
+  .lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .lb-title{font-family:"Archivo",sans-serif;font-weight:700;font-size:14px;color:var(--cream)}
+  .lb-close{
+    background:var(--lime);border:0;border-radius:999px;cursor:pointer;
+    width:32px;height:32px;display:grid;place-items:center;
+    font-family:"DM Mono",monospace;font-size:15px;color:var(--black);line-height:1;
+  }
+  .lb-frame{
+    position:relative;width:100%;height:min(74vh,660px);
+    border-radius:18px;overflow:hidden;background:#000;
+  }
+  .lb-frame iframe,
+  .lb-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .lb-out{
+    font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--cream);opacity:.6;
+    text-decoration:underline;text-align:center;
+  }
+  .lb-out:hover{opacity:1}
+
+  .slot-out{
+    position:absolute;right:10px;bottom:10px;z-index:2;
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--lime);color:var(--black);
+    font-family:"DM Mono",monospace;font-size:9.5px;letter-spacing:.06em;
+    text-transform:uppercase;padding:5px 9px;border-radius:999px;
+    transition:transform .22s ease;
+  }
+  .slot:hover .slot-out{transform:translateX(2px) translateY(-2px)}
+  .slot-out svg{width:11px;height:11px}
+
+  .slot-empty.linked{
+    background:var(--blue);
+  }
+  .slot-empty.linked .ring{border-style:solid;border-color:rgba(255,255,255,.5)}
+  .slot-empty.linked .ring svg{fill:#fff}
+  .slot-empty.linked p{color:#fff;opacity:.9}
+
+  .slot-caption{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .slot-caption b{
+    font-family:"Archivo",sans-serif;font-weight:700;font-size:13px;letter-spacing:-.01em;
+  }
+  .slot-caption span{
+    font-family:"DM Mono",monospace;font-size:10.5px;opacity:.5;white-space:nowrap;
+  }
+
+  /* ---------- panel ---------- */
+  .panel{
+    margin-top:clamp(46px,7vw,80px);
+    border:1px solid var(--line);border-radius:var(--radius);
+    background:transparent;
+    padding:clamp(24px,4vw,44px);
+  }
+
+  .panel-head{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    gap:28px;flex-wrap:wrap;margin-bottom:clamp(22px,3vw,34px);
+  }
+  .panel-head h2{
+    font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;margin:0;
+  }
+  .panel-head p{margin:0;max-width:38ch;font-size:14px;line-height:1.55;opacity:.75}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,20px)}
+
+  .card{
+    border:1.5px solid var(--blue);border-radius:16px;
+    padding:18px;display:flex;flex-direction:column;
+    background:var(--cream-lift);
+    transition:transform .28s cubic-bezier(.2,.8,.3,1);
+  }
+  .card:hover{transform:translateY(-5px)}
+  .card.featured{background:var(--blue);border-color:var(--blue);color:#fff}
+
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .card h3{
+    font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:clamp(16px,1.9vw,20px);line-height:1.1;letter-spacing:-.02em;margin:0;
+    max-width:9ch;
+  }
+  .badge{
+    flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+    background:var(--blue);display:grid;place-items:center;
+    transition:transform .28s ease;
+  }
+  .card.featured .badge{background:var(--lime)}
+  .card:hover .badge{transform:rotate(45deg)}
+  .badge svg{width:12px;height:12px}
+
+  .card .rule{height:1px;background:currentColor;opacity:.25;margin:16px 0 12px}
+  .card p{margin:0 0 16px;font-size:13px;line-height:1.5;opacity:.85}
+
+  .card-art{
+    margin-top:auto;border-radius:10px;overflow:hidden;
+    position:relative;padding-top:62%;background:var(--black);
+  }
+  .card-art .layer{position:absolute;border-radius:4px}
+
+  /* ---------- toolkit ---------- */
+  .toolkit{
+    margin-top:clamp(28px,4vw,40px);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding-top:clamp(22px,3vw,30px);border-top:1px solid var(--line);
+  }
+  .toolkit .label{
+    font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.55;
+  }
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    border:1.5px solid var(--ink);border-radius:999px;padding:7px 15px;
+    font-family:"Archivo",sans-serif;font-weight:600;font-size:12.5px;
+    letter-spacing:.02em;
+  }
+  .chip.solid{background:var(--ink);color:var(--cream)}
+
+  /* ---------- statement ---------- */
+  .statement{
+    margin-top:clamp(38px,6vw,64px);position:relative;text-align:center;
+    padding:0 clamp(0px,4vw,50px);
+  }
+  .statement h2{
+    font-family:"Archivo",sans-serif;font-weight:800;
+    font-size:clamp(21px,3.5vw,38px);line-height:1.2;letter-spacing:-.02em;
+    text-transform:uppercase;margin:0;
+  }
+  .outline-pill{
+    display:inline-block;border:1.5px solid var(--lime);background:transparent;
+    border-radius:999px;padding:2px 16px 4px;
+  }
+  .blue{color:var(--blue)}
+  .statement .sig{
+    margin-top:18px;font-size:13px;line-height:1.5;
+  }
+  .statement .sig span{display:block;opacity:.6}
+  .statement .sig strong{font-weight:700}
+  .star-3{width:clamp(22px,3vw,38px);height:clamp(22px,3vw,38px);left:0;top:12%}
+  .star-4{width:clamp(22px,3vw,38px);height:clamp(22px,3vw,38px);right:2%;bottom:0}
+
+  /* ---------- contact ---------- */
+  .contact{
+    margin-top:clamp(34px,5vw,56px);
+    display:flex;justify-content:space-between;align-items:center;
+    gap:20px;flex-wrap:wrap;
+  }
+  .contact .kicker{
+    font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.55;margin-bottom:6px;
+  }
+  .contact a.mail{
+    font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:clamp(19px,3vw,30px);letter-spacing:-.02em;
+    color:var(--ink);text-decoration:none;
+    border-bottom:2px solid var(--blue);
+  }
+  .contact a.mail:hover{color:var(--blue)}
+
+  /* ---------- footer ---------- */
+  .foot{
+    margin-top:clamp(30px,4vw,44px);padding-top:20px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:12.5px;
+  }
+  .foot .right{font-weight:700}
+  .foot .right em{font-style:normal;font-weight:400;opacity:.55;margin:0 6px}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1000px){
+    .work-grid{grid-template-columns:repeat(3,1fr)}
+  }
+  @media (max-width:880px){
+    .cards{grid-template-columns:1fr}
+    .card h3{max-width:none}
+    .card-art{padding-top:44%}
+  }
+  @media (max-width:720px){
+    .nav-links{display:none}
+    .reel{margin-left:calc(-1 * clamp(20px,5vw,64px));margin-right:calc(-1 * clamp(20px,5vw,64px))}
+    .tiles{justify-content:flex-start;overflow-x:auto;padding:0 20px 6px;scrollbar-width:none}
+    .tiles::-webkit-scrollbar{display:none}
+    .tile{width:118px}
+    .rail{display:none}
+    .hero-meta{align-items:flex-start}
+    .work-grid{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="inner">
+
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-group">
+        <button type="button" class="brand" data-scroll="top">JRB</button>
+        <div class="nav-links">
+          <button type="button" data-scroll="work">Work</button>
+          <button type="button" data-scroll="services">Services</button>
+          <button type="button" data-scroll="about">About</button>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button type="button" class="pill-link" data-scroll="contact">Book an edit ↗</button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div class="star star-1" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="currentColor"><path d="M18 0h4v14.3l10.1-10.1 2.8 2.8L24.8 17H40v4H24.8l10.1 10.1-2.8 2.8L22 24.8V40h-4V25.2L7.9 35.3l-2.8-2.8L15.2 22H0v-4h15.2L5.1 7.9l2.8-2.8L18 15.2V0z"/></svg>
+      </div>
+      <div class="star star-2" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 0c1.5 10.5 9.5 18.5 20 20-10.5 1.5-18.5 9.5-20 20-1.5-10.5-9.5-18.5-20-20C10.5 18.5 18.5 10.5 20 0z"/></svg>
+      </div>
+
+      <h1 class="reveal">
+        Short-form edits
+        <span class="arrow-pill" aria-hidden="true">
+          <svg viewBox="0 0 48 16" fill="none"><path d="M0 8h44M36 1l8 7-8 7" stroke="#1A1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        that hold attention
+      </h1>
+
+      <div class="hero-meta reveal">
+        <div class="stats">
+          <span class="label">Editor &amp; motion designer</span>
+          <strong>300+ videos cut</strong>
+          <strong>48-hour turnaround</strong>
+        </div>
+        <button class="cta" type="button" data-scroll="contact">
+          <span class="cta-text">Start a project</span>
+          <span class="cta-badge" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 12L12 4M12 4H5.5M12 4v6.5" stroke="#1A1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+
+      <!-- REEL STRIP -->
+      <section class="reel reveal" id="reel" aria-label="Reel preview">
+        <div class="tiles">
+          <button class="tile t-lime offset-a" type="button">
+            <span class="ratio"></span>
+            <span class="tile-art" aria-hidden="true">
+              <span class="band" style="left:14%;top:20%;width:52%;height:8%;background:#1A1917"></span>
+              <span class="band" style="left:14%;top:34%;width:34%;height:8%;background:#3D2EE8"></span>
+              <span class="band" style="left:14%;top:48%;width:64%;height:8%;background:#1A1917"></span>
+            </span>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12" fill="#1A1917"><path d="M0 0l10 6-10 6z"/></svg></span>
+            <span class="tile-tag"><span>Kinetic type</span><span>0:18</span></span>
+          </button>
+
+          <button class="tile t-dark offset-b" type="button">
+            <span class="ratio"></span>
+            <span class="tile-art" aria-hidden="true">
+              <span class="band" style="left:22%;top:26%;width:56%;height:26%;background:#3D2EE8;border-radius:50%"></span>
+              <span class="band" style="left:22%;top:60%;width:56%;height:6%;background:#D8F44C"></span>
+              <span class="band" style="left:22%;top:70%;width:34%;height:6%;background:rgba(255,255,255,.35)"></span>
+            </span>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12" fill="#1A1917"><path d="M0 0l10 6-10 6z"/></svg></span>
+            <span class="tile-tag"><span>Logo sting</span><span>0:06</span></span>
+          </button>
+
+          <button class="tile tall offset-c" type="button">
+            <span class="ratio"></span>
+            <span class="tile-art" aria-hidden="true">
+              <span class="band" style="left:16%;top:14%;width:68%;height:46%;background:#D8F44C;border-radius:10px"></span>
+              <span class="band" style="left:16%;top:66%;width:68%;height:7%;background:rgba(255,255,255,.9)"></span>
+              <span class="band" style="left:16%;top:77%;width:44%;height:7%;background:rgba(255,255,255,.45)"></span>
+            </span>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12" fill="#1A1917"><path d="M0 0l10 6-10 6z"/></svg></span>
+            <span class="tile-tag"><span>Talking head</span><span>0:42</span></span>
+          </button>
+
+          <button class="tile t-dark offset-b" type="button">
+            <span class="ratio"></span>
+            <span class="tile-art" aria-hidden="true">
+              <span class="band" style="left:20%;top:18%;width:60%;height:5%;background:#D8F44C"></span>
+              <span class="band" style="left:20%;top:30%;width:60%;height:5%;background:rgba(255,255,255,.3)"></span>
+              <span class="band" style="left:20%;top:42%;width:60%;height:5%;background:#3D2EE8"></span>
+              <span class="band" style="left:20%;top:54%;width:38%;height:5%;background:rgba(255,255,255,.3)"></span>
+              <span class="band" style="left:20%;top:66%;width:60%;height:5%;background:rgba(255,255,255,.3)"></span>
+            </span>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12" fill="#1A1917"><path d="M0 0l10 6-10 6z"/></svg></span>
+            <span class="tile-tag"><span>Captions pass</span><span>0:31</span></span>
+          </button>
+
+          <button class="tile offset-a" type="button">
+            <span class="ratio"></span>
+            <span class="tile-art" aria-hidden="true">
+              <span class="band" style="left:18%;top:22%;width:64%;height:34%;background:#F1EEE8;border-radius:8px"></span>
+              <span class="band" style="left:18%;top:62%;width:30%;height:6%;background:#D8F44C"></span>
+            </span>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12" fill="#1A1917"><path d="M0 0l10 6-10 6z"/></svg></span>
+            <span class="tile-tag"><span>Product promo</span><span>0:24</span></span>
+          </button>
+        </div>
+
+        <div class="rail" aria-hidden="true">
+          <span class="rail-line"></span>
+          <span class="rail-keys">
+            <span class="rail-key"><i></i></span>
+            <span class="rail-key"><i></i></span>
+            <span class="rail-key"><i></i></span>
+            <span class="rail-key"><i></i></span>
+            <span class="rail-key"><i></i></span>
+          </span>
+          <span class="playhead"></span>
+        </div>
+        <div class="rail-meta" aria-hidden="true">
+          <span>Selected work — 2026 reel</span>
+          <span>Hover to preview</span>
+        </div>
+      </section>
+    </header>
+
+    <!-- FIVE VIDEOS -->
+    <section class="work reveal" id="work">
+      <div class="work-head">
+        <h2>The work</h2>
+        <span class="note">Five picks · vertical 9:16</span>
+      </div>
+      <div class="work-grid" id="workGrid"></div>
+    </section>
+
+    <!-- PANEL -->
+    <main class="panel reveal" id="services">
+      <div class="panel-head">
+        <h2>What I edit</h2>
+        <p>Three ways to work together, whether you need one video cut or a steady feed of them every month.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-top">
+            <h3>Short-form edit</h3>
+            <span class="badge" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5.5M12 4v6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+          <div class="rule"></div>
+          <p>Reels, TikToks and Shorts. Hook in the first two seconds, tight pacing, clean captions and sound design.</p>
+          <div class="card-art" aria-hidden="true">
+            <span class="layer" style="left:8%;top:16%;width:22%;height:68%;background:#3D2EE8"></span>
+            <span class="layer" style="left:34%;top:16%;width:22%;height:68%;background:#D8F44C"></span>
+            <span class="layer" style="left:60%;top:16%;width:32%;height:30%;background:rgba(255,255,255,.9)"></span>
+            <span class="layer" style="left:60%;top:54%;width:32%;height:30%;background:rgba(255,255,255,.35)"></span>
+          </div>
+        </article>
+
+        <article class="card featured">
+          <div class="card-top">
+            <h3>Motion design</h3>
+            <span class="badge" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5.5M12 4v6.5" stroke="#1A1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+          <div class="rule"></div>
+          <p>Animated titles, logo stings, kinetic type and transitions built in After Effects.</p>
+          <div class="card-art" style="background:#D8F44C" aria-hidden="true">
+            <span class="layer" style="left:10%;top:22%;width:40%;height:14%;background:#1A1917"></span>
+            <span class="layer" style="left:10%;top:44%;width:60%;height:14%;background:#3D2EE8"></span>
+            <span class="layer" style="left:10%;top:66%;width:26%;height:14%;background:#1A1917"></span>
+            <span class="layer" style="right:8%;top:20%;width:16%;height:60%;background:rgba(26,25,23,.15);border-radius:8px"></span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <h3>Monthly retainer</h3>
+            <span class="badge" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5.5M12 4v6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+          <div class="rule"></div>
+          <p>A set number of videos every month, one point of contact and priority turnaround on every drop.</p>
+          <div class="card-art" aria-hidden="true">
+            <span class="layer" style="left:8%;top:18%;width:84%;height:8%;background:#3D2EE8"></span>
+            <span class="layer" style="left:8%;top:34%;width:60%;height:8%;background:rgba(255,255,255,.85)"></span>
+            <span class="layer" style="left:8%;top:50%;width:72%;height:8%;background:#D8F44C"></span>
+            <span class="layer" style="left:8%;top:66%;width:40%;height:8%;background:rgba(255,255,255,.4)"></span>
+          </div>
+        </article>
+      </div>
+
+      <div class="toolkit" id="about">
+        <span class="label">Built in</span>
+        <div class="chips">
+          <span class="chip solid">After Effects</span>
+          <span class="chip">Premiere Pro</span>
+          <span class="chip">Figma</span>
+          <span class="chip">Photoshop</span>
+        </div>
+      </div>
+
+      <section class="statement">
+        <div class="star star-3" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="currentColor"><path d="M18 0h4v14.3l10.1-10.1 2.8 2.8L24.8 17H40v4H24.8l10.1 10.1-2.8 2.8L22 24.8V40h-4V25.2L7.9 35.3l-2.8-2.8L15.2 22H0v-4h15.2L5.1 7.9l2.8-2.8L18 15.2V0z"/></svg>
+        </div>
+        <div class="star star-4" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="currentColor"><path d="M18 0h4v14.3l10.1-10.1 2.8 2.8L24.8 17H40v4H24.8l10.1 10.1-2.8 2.8L22 24.8V40h-4V25.2L7.9 35.3l-2.8-2.8L15.2 22H0v-4h15.2L5.1 7.9l2.8-2.8L18 15.2V0z"/></svg>
+        </div>
+        <h2>Keep <span class="outline-pill">cutting</span> until the<br class="hide-sm"> story <span class="blue">earns the scroll.</span></h2>
+        <div class="sig">
+          <span>James Reymar Bacusa</span>
+          <strong>Video editor &amp; motion designer</strong>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div>
+          <div class="kicker">Have footage sitting in a folder?</div>
+          <a class="mail" href="mailto:spxsjames@gmail.com">spxsjames@gmail.com</a>
+        </div>
+        <a class="cta" href="mailto:spxsjames@gmail.com">
+          <span class="cta-text">Send a brief</span>
+          <span class="cta-badge" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M4 12L12 4M12 4H5.5M12 4v6.5" stroke="#1A1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+      </section>
+
+      <footer class="foot">
+        <span>© James Reymar Bacusa</span>
+        <span class="right">Short-form &amp; motion <em>·</em> 2026</span>
+      </footer>
+    </main>
+
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Video player">
+  <div class="lb-card" id="lbCard">
+    <div class="lb-bar">
+      <span class="lb-title" id="lbTitle"></span>
+      <button class="lb-close" type="button" id="lbClose" aria-label="Close player">✕</button>
+    </div>
+    <div class="lb-frame" id="lbFrame"></div>
+    <a class="lb-out" id="lbOut" href="#" target="_blank" rel="noopener noreferrer">Open on Instagram ↗</a>
+  </div>
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ==========================================================
+     YOUR 5 VIDEOS — this is the only part you need to edit.
+
+     BEST — silent loop in the tile, full video with sound on click:
+       file:  "videos/my-edit.mp4"
+       loop:  true
+       thumb: "thumbs/my-edit.jpg"   (cover frame, optional)
+
+     A GIF instead:
+       thumb: "thumbs/my-edit.gif"   (it will animate on its own)
+
+     YOUTUBE or INSTAGRAM — plays in a pop-up on this page, no redirect:
+       link:  "https://youtube.com/shorts/XXXXXXXXXXX"
+       or     "https://www.instagram.com/reel/SHORTCODE/"
+       Paste the normal link — the cover image and player are handled for you.
+       Must be public. Instagram is blocked by some ad blockers.
+
+     Leave everything empty and the slot shows an "add video" placeholder.
+     ========================================================== */
+  const VIDEOS = [
+    { title: "Talking Head with Motion Graphics", duration: "", thumb: "", file: "", loop: true, link: "https://youtube.com/shorts/yhSsTDAL4Xo", embed: "", wide: false },
+    { title: "Real Estate Cinematic Tour", duration: "", thumb: "", file: "", loop: true, link: "https://youtube.com/shorts/hn-5-neOluY", embed: "", wide: false },
+    { title: "Motion Graphic Ad", duration: "", thumb: "", file: "", loop: true, link: "https://youtu.be/LRepicYuF_4", embed: "", wide: true },
+    { title: "Project four",  duration: "", thumb: "", file: "", loop: true, link: "", embed: "", wide: false },
+    { title: "Project five",  duration: "", thumb: "", file: "", loop: true, link: "", embed: "", wide: false }
+  ];
+
+  // Landscape pieces render as a full-width feature above the vertical ones
+  const ORDERED = [...VIDEOS].sort((a, b) => (b.wide === true) - (a.wide === true));
+
+  const grid = document.getElementById('workGrid');
+
+  // Turns a normal YouTube or Instagram link into something playable on this page
+  function resolveLink(url) {
+    if (!url) return null;
+
+    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/);
+    if (yt) return {
+      embed: `https://www.youtube-nocookie.com/embed/${yt[1]}?rel=0&playsinline=1`,
+      thumb: `https://i.ytimg.com/vi/${yt[1]}/maxresdefault.jpg`,
+      fallbackThumb: `https://i.ytimg.com/vi/${yt[1]}/hqdefault.jpg`,
+      label: 'YouTube'
+    };
+
+    const ig = url.match(/instagram\.com\/(reel|p|tv)\/([\w-]+)/);
+    if (ig) return {
+      embed: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/`,
+      thumb: '', fallbackThumb: '', label: 'Instagram'
+    };
+
+    return { embed: url, thumb: '', fallbackThumb: '', label: 'source' };
+  }
+
+  function buildSlot(v, i, ignoreFile) {
+    const num = String(i + 1).padStart(2, '0');
+    const useFile = v.file && !ignoreFile;
+    const src = resolveLink(v.link);
+    const autoThumb = !v.thumb && src && src.thumb ? src.thumb : '';
+    let media;
+
+    if (useFile && v.loop) {
+      media = `<video src="${v.file}" ${v.thumb ? `poster="${v.thumb}"` : ''} muted loop playsinline preload="metadata" ${reduceMotion ? '' : 'autoplay'}></video>`;
+    } else if (useFile) {
+      media = `<video src="${v.file}" ${v.thumb ? `poster="${v.thumb}"` : ''} controls playsinline preload="metadata"></video>`;
+    } else if (v.embed) {
+      media = `<iframe src="${v.embed}" title="${v.title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy" scrolling="no"></iframe>`;
+    } else if (v.thumb || autoThumb) {
+      const fb = autoThumb && src.fallbackThumb
+        ? ` onerror="this.onerror=null;this.src='${src.fallbackThumb}'"` : '';
+      media = `<img src="${v.thumb || autoThumb}" alt="${v.title}" loading="lazy"${fb}>`;
+    } else if (v.link) {
+      media = `
+        <div class="slot-empty linked">
+          <span class="ring"><svg viewBox="0 0 10 12" fill="#3D2EE8"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <p>Tap to play</p>
+        </div>`;
+    } else {
+      media = `
+        <div class="slot-empty">
+          <span class="ring"><svg viewBox="0 0 10 12" fill="#3D2EE8"><path d="M0 0l10 6-10 6z"/></svg></span>
+          <p>Slot ${num}<br>Add your video</p>
+        </div>`;
+    }
+
+    const loopPreview = useFile && v.loop;
+    const playable = loopPreview ? v.file : (v.embed || (src && src.embed) || '');
+    const clickable = !!playable && (loopPreview || !useFile);
+    const kind = loopPreview ? 'video' : 'iframe';
+
+    const badge = clickable ? `
+      <span class="slot-out">
+        <svg viewBox="0 0 10 12" fill="currentColor"><path d="M0 0l10 6-10 6z"/></svg>
+        ${loopPreview ? 'Sound' : 'Play'}
+      </span>` : '';
+
+    const frame = `
+      <div class="slot-frame">
+        <span class="slot-index">${num}</span>
+        ${media}
+        ${badge}
+      </div>`;
+
+    return `
+      ${clickable
+        ? `<button class="slot-link" type="button" data-play="${playable}" data-kind="${kind}"
+             data-title="${v.title}" data-wide="${!!v.wide}" data-label="${src ? src.label : ''}"
+             data-out="${loopPreview ? '' : (v.link || '')}">${frame}</button>`
+        : frame}
+      <div class="slot-caption"><b>${v.title}</b>${v.duration ? `<span>${v.duration}</span>` : ''}</div>`;
+  }
+
+  ORDERED.forEach((v, i) => {
+    const slot = document.createElement('article');
+    slot.className = 'slot' + (v.wide ? ' wide' : '');
+    slot.innerHTML = buildSlot(v, i, false);
+    grid.appendChild(slot);
+
+    // If the mp4 is missing or won't play, fall back to the Instagram player
+    const vid = slot.querySelector('video');
+    if (vid) {
+      vid.addEventListener('error', () => { slot.innerHTML = buildSlot(v, i, true); }, true);
+    }
+  });
+
+  // Column count follows however many vertical slots there are
+  const cols = Math.max(VIDEOS.filter(v => !v.wide).length, 1);
+  const gridStyle = document.createElement('style');
+  gridStyle.textContent = `
+    #workGrid{grid-template-columns:repeat(${cols},1fr)}
+    @media (max-width:1000px){#workGrid{grid-template-columns:repeat(${Math.min(cols,3)},1fr)}}
+    @media (max-width:620px){#workGrid{grid-template-columns:repeat(${Math.min(cols,2)},1fr)}}`;
+  document.head.appendChild(gridStyle);
+
+  /* ---- in-page player ---- */
+  const lb = document.getElementById('lightbox');
+  const lbFrame = document.getElementById('lbFrame');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbOut = document.getElementById('lbOut');
+  const lbClose = document.getElementById('lbClose');
+  let lastFocused = null;
+
+  function openPlayer(src, title, out, kind, wide, label) {
+    lastFocused = document.activeElement;
+    lbTitle.textContent = title;
+    document.getElementById('lbCard').style.width = wide === 'true' ? 'min(760px,92vw)' : 'min(370px,92vw)';
+    lbFrame.style.height = wide === 'true' ? 'min(56vw,430px)' : 'min(74vh,660px)';
+    lbFrame.innerHTML = kind === 'video'
+      ? `<video src="${src}" controls autoplay playsinline></video>`
+      : `<iframe src="${src}${src.includes('?') ? '&' : '?'}autoplay=1" title="${title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen scrolling="no"></iframe>`;
+    if (out) { lbOut.href = out; lbOut.textContent = `Open on ${label || 'source'} \u2197`; lbOut.style.display = 'block'; }
+    else { lbOut.style.display = 'none'; }
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lbClose.focus();
+  }
+
+  function closePlayer() {
+    lb.classList.remove('open');
+    lbFrame.innerHTML = '';
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-play]');
+    if (btn) openPlayer(btn.dataset.play, btn.dataset.title, btn.dataset.out, btn.dataset.kind, btn.dataset.wide, btn.dataset.label);
+  });
+
+  lbClose.addEventListener('click', closePlayer);
+  lb.addEventListener('click', (e) => { if (e.target === lb) closePlayer(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lb.classList.contains('open')) closePlayer();
+  });
+
+  document.querySelectorAll('.reel .tile').forEach(t => {
+    t.addEventListener('click', () => {
+      document.getElementById('work').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  document.querySelectorAll('[data-scroll]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.scroll);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (reduce) { el.classList.add('in'); } else { io.observe(el); }
+  });
+
+  if (!reduce) {
+    const rail = document.querySelector('.rail');
+    const railObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.target.classList.toggle('run', e.isIntersecting));
+    }, { threshold: 0.4 });
+    if (rail) railObserver.observe(rail);
+  }
+</script>
+</body>
+</html>
